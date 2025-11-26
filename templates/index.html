@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitor de Salud de Raspberry Pi ⚡️</title>
+    <style>
+        /* Variables y Base */
+        :root {
+            --bg-color: #1e1e2f;
+            --card-bg: #27293d;
+            --terminal-bg: #11111d;
+            --primary-color: #5d5386;
+            --success-color: #00e676;
+            --text-color: #f0f0f0;
+            --border-color: #3f415a;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+        .header {
+            background-color: var(--card-bg);
+            padding: 20px 40px;
+            border-bottom: 3px solid var(--primary-color);
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 1.8em;
+            color: var(--text-color);
+        }
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        /* Estilo de Metadatos */
+        .metadata {
+            font-size: 0.9em;
+            color: #aaa;
+            margin-bottom: 20px;
+            border-left: 3px solid var(--success-color);
+            padding-left: 10px;
+        }
+
+        /* Estilo de las Secciones (Grid/Flexbox) */
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+        @media (min-width: 768px) {
+            .grid-layout {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        /* Estilo de las Tarjetas/Secciones */
+        .card {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-color);
+        }
+        h2 {
+            color: var(--primary-color);
+            margin-top: 0;
+            font-size: 1.4em;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        /* Estilo de Terminal */
+        .terminal {
+            background-color: var(--terminal-bg);
+            color: var(--success-color);
+            padding: 15px;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            min-height: 150px;
+            font-size: 0.85em;
+        }
+        
+        /* Estilos específicos para métricas */
+        .resource-value {
+            font-size: 1.1em;
+            color: #fff;
+            padding: 5px 0;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Dashboard de Monitoreo de Sistema ⚡️</h1>
+    </div>
+
+    <div class="container">
+        <p class="metadata">
+            Dispositivo: **Raspberry Pi Zero 2 W** | Última Actualización: **{{ timestamp }}**
+        </p>
+        
+        <div class="grid-layout">
+            
+            <div class="card">
+                <h2>Estado y Recursos del Sistema</h2>
+                
+                <p class="resource-value">**Uso de Disco (Root):**</p>
+                <div class="terminal resource-value">
+                    {% if df_h %}
+                    <pre>{{ df_h }}</pre>
+                    {% else %}
+                    <pre>Cargando información del disco...</pre>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Logs del Kernel (dmesg)</h2>
+                <div class="terminal">
+                    <pre>{{ dmesg_logs }}</pre>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</body>
+</html>
